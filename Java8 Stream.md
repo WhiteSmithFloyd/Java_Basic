@@ -124,13 +124,13 @@ Optional<Person> person = list.stream()
 #### Optional介绍
 Optional是Java8新加入的一个容器，这个容器 __只存1个或0个元素__ ，它用于防止出现NullpointException，它提供如下方法：
 > __isPresent()__   
-> 判断容器中是否有值。   
+>   判断容器中是否有值。   
 > __ifPresent(Consume lambda)__   
-> 容器若不为空则执行括号中的Lambda表达式。   
+>   容器若不为空则执行括号中的Lambda表达式。   
 > __T get()__   
-> 获取容器中的元素，若容器为空则抛出NoSuchElement异常。   
+>   获取容器中的元素，若容器为空则抛出NoSuchElement异常。   
 > __T orElse(T other)__   
-> 获取容器中的元素，若容器为空则返回括号中的默认值。   
+>   获取容器中的元素，若容器为空则返回括号中的默认值。   
 
 
 

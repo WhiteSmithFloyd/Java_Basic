@@ -106,23 +106,23 @@ list.stream()
 ```
 
 ### 是否匹配任一元素：anyMatch
-anyMatch用于判断流中是否__存在至少一个元素__满足指定的条件，这个判断条件通过Lambda表达式传递给anyMatch，执行结果为boolean类型。
+anyMatch用于判断流中是否 __存在至少一个元素__ 满足指定的条件，这个判断条件通过Lambda表达式传递给anyMatch，执行结果为boolean类型。
 
 ### 是否匹配所有元素：allMatch
-allMatch用于判断流中是否__所有元素都满足__指定条件，这个判断条件通过Lambda表达式传递给anyMatch，执行结果为boolean类型。 
+allMatch用于判断流中是否 __所有元素都满足__ 指定条件，这个判断条件通过Lambda表达式传递给anyMatch，执行结果为boolean类型。 
 
 ### 是否未匹配所有元素：noneMatch
-noneMatch与allMatch恰恰相反，它用于判断流中的__所有元素是否都不满足__指定条件
+noneMatch与allMatch恰恰相反，它用于判断流中的 __所有元素是否都不满足__ 指定条件
 
 ### 获取任一元素findAny
-findAny能够从流中随便选一个元素出来，它返回一个__Optional类型__的元素
+findAny能够从流中随便选一个元素出来，它返回一个 __Optional类型__ 的元素
 ```java
 Optional<Person> person = list.stream()
                                     .findAny();
 ```
 
 #### Optional介绍
-Optional是Java8新加入的一个容器，这个容器__只存1个或0个元素__，它用于防止出现NullpointException，它提供如下方法：
+Optional是Java8新加入的一个容器，这个容器 __只存1个或0个元素__ ，它用于防止出现NullpointException，它提供如下方法：
 > __isPresent()__
 > 判断容器中是否有值。
 > __ifPresent(Consume lambda)__

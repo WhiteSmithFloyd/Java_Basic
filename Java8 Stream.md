@@ -1,5 +1,6 @@
 # Java8 Stream
-[toc]
+From http://blog.csdn.net/u010425776/article/details/52344425
+[TOC]
 
 ## 什么是流
 流是Java8引入的全新概念，它用来处理集合中的数据，暂且可以把它理解为一种高级集合。

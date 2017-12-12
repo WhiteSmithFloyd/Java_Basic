@@ -312,7 +312,7 @@ Optional<Integer> sumAge = list.stream()
 将所有人分为老年人、中年人、青年人
 ```java
 Map<String,List<Person>> result = list.stream()
-        .collect(Collectors.**groupingby**( (person)->{
+        .collect(Collectors.groupingby( (person)->{
           if(person.getAge()>60)
               return "老年人";
           else if(person.getAge()>40)

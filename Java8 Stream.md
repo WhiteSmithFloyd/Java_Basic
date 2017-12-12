@@ -133,6 +133,65 @@ Optional是Java8新加入的一个容器，这个容器 __只存1个或0个元�
 > __T orElse(T other)__   
 >   获取容器中的元素，若容器为空则返回括号中的默认值。   
 
+### 获取第一个元素findFirst
+```java
+Optional<Person> person = list.stream()
+                                    .findFirst();
+```
+
+### 归约
+归约是将集合中的所有元素经过指定运算，折叠成一个元素输出，如：求最值、平均数等，这些操作都是将一个集合的元素折叠成一个元素输出。   
+在流中，reduce函数能实现归约。 
+reduce函数接收两个参数：
++ 初始值
++ 进行归约操作的Lambda表达式
+
+#### 元素求和 (自定义Lambda表达式实现求和)
+计算所有人的年龄总和
+```java
+int age = list.stream().reduce(0, (person1,person2)->person1.getAge()+person2.getAge());
+```
+reduce的第一个参数表示初试值为0；    
+reduce的第二个参数为需要进行的归约操作，它接收一个拥有两个参数的Lambda表达式，reduce会把流中的元素__两两__输给Lambda表达式，最后将计算出累加之和。    
+#### 元素求和 (使用Integer.sum函数求和)
+如果当前流的元素为数值类型，那么可以使用Integer提供了sum函数代替自定义的Lambda表达式，如：
+```java
+int age = list.stream().reduce(0, Integer::sum);
+```
+Integer类还提供了min、max等一系列数值操作，当流中元素为数值类型时可以直接使用。   
+
+
+
+### 数值流的使用
+采用reduce进行数值操作会涉及到基本数值类型和引用数值类型之间的装箱、拆箱操作，因此效率较低。    
+当流操作为纯数值操作时，使用数值流能获得较高的效率。
+
+#### 将普通流转换成数值流
+StreamAPI提供了三种数值流：IntStream、DoubleStream、LongStream，也提供了将普通流转换成数值流的三种方法：mapToInt、mapToDouble、mapToLong。   
+```java
+IntStream stream = list.stream()
+                            .mapToInt(Person::getAge);
+```
+
+#### 数值计算
+每种数值流都提供了数值计算函数，如max、min、sum等。   
+如，找出最大的年龄：   
+```java
+OptionalInt maxAge = list.stream()
+                                .mapToInt(Person::getAge)
+                                .max();
+/* 由于数值流可能为空，并且给空的数值流计算最大值是没有意义的，因此max函数返回OptionalInt
+ * 它是Optional的一个子类，能够判断流是否为空，并对流为空的情况作相应的处理。                                
+ */
+```
+此外，mapToInt、mapToDouble、mapToLong进行数值操作后的返回结果分别为：OptionalInt、OptionalDouble、OptionalLong
+
+
+
+
+
+
+
 
 
 

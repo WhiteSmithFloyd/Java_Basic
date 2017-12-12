@@ -145,7 +145,8 @@ Optional<Person> person = list.stream()
 reduce函数接收两个参数：
 + 初始值
 + 进行归约操作的Lambda表达式
-
+   
+   
 #### 元素求和 (自定义Lambda表达式实现求和)
 计算所有人的年龄总和
 ```java
@@ -153,26 +154,29 @@ int age = list.stream().reduce(0, (person1,person2)->person1.getAge()+person2.ge
 ```
 reduce的第一个参数表示初试值为0；    
 reduce的第二个参数为需要进行的归约操作，它接收一个拥有两个参数的Lambda表达式，reduce会把流中的元素__两两__输给Lambda表达式，最后将计算出累加之和。    
+
 #### 元素求和 (使用Integer.sum函数求和)
 如果当前流的元素为数值类型，那么可以使用Integer提供了sum函数代替自定义的Lambda表达式，如：
 ```java
 int age = list.stream().reduce(0, Integer::sum);
 ```
 Integer类还提供了min、max等一系列数值操作，当流中元素为数值类型时可以直接使用。   
-
-
+   
+   
 
 ### 数值流的使用
 采用reduce进行数值操作会涉及到基本数值类型和引用数值类型之间的装箱、拆箱操作，因此效率较低。    
 当流操作为纯数值操作时，使用数值流能获得较高的效率。
-
+   
+   
 #### 将普通流转换成数值流
 StreamAPI提供了三种数值流：IntStream、DoubleStream、LongStream，也提供了将普通流转换成数值流的三种方法：mapToInt、mapToDouble、mapToLong。   
 ```java
 IntStream stream = list.stream()
                             .mapToInt(Person::getAge);
 ```
-
+   
+   
 #### 数值计算
 每种数值流都提供了数值计算函数，如max、min、sum等。   
 如，找出最大的年龄：   
@@ -186,7 +190,8 @@ OptionalInt maxAge = list.stream()
 ```
 此外，mapToInt、mapToDouble、mapToLong进行数值操作后的返回结果分别为：OptionalInt、OptionalDouble、OptionalLong
 
-
+   
+   
 ## 收集器简介
 收集器用来将经过筛选、映射的流进行最后的整理，可以使得最后的结果以不同的形式展现。   
 
@@ -196,11 +201,15 @@ OptionalInt maxAge = list.stream()
 
 下面介绍Collector常用默认静态方法的使用
 
-
+   
+      
+   
 ## 收集器的使用   
 ### 归约
 流由一个个元素组成，归约就是将一个个元素“折叠”成一个值，如求和、求最值、求平均值都是归约操作   
-
+   
+      
+   
 #### 计数
 ```java
 long count = list.stream()
@@ -210,7 +219,9 @@ long count = list.stream()
 ```java
 long count = list.stream().count();
 ```
-
+   
+      
+   
 #### 最值
 找出所有人中年龄最大的人
 ```java
@@ -219,7 +230,8 @@ Optional<Person> oldPerson = list.stream()
 ```
 计算最值需要使用Collector.maxBy和Collector.minBy，这两个函数需要传入一个比较器**Comparator.comparingInt**，这个比较器又要接收需要比较的字段。
 
-
+   
+   
 #### 求和
 计算所有人的年龄总和
 ```java
@@ -228,7 +240,8 @@ int summing = list.stream()
 ```
 既然Java8提供了summingInt，那么还提供了summingLong、summingDouble。
 
-
+   
+   
 #### 求平均值
 计算所有人的年龄平均值
 ```java
@@ -242,7 +255,8 @@ double avg = list.stream()
 #### 一次性计算所有归约操作
 **Collectors.summarizingInt**函数能一次性将最值、均值、总和、元素个数全部计算出来，并存储在对象IntSummaryStatisics中。    
 可以通过该对象的getXXX()函数获取这些值。
-
+   
+   
 
 #### 连接字符串
 将所有人的名字连接成一个字符串
@@ -255,17 +269,26 @@ String names = list.stream()
 String names = list.stream()
       .collect(Collectors.joining(", "));
 ```
+此时字符串之间的分隔符为逗号。
 
 
 
 
+#### 一般性的归约操作
+若你需要自定义一个归约操作，那么需要使用Collectors.reducing函数，该函数接收三个参数：
++ 第一个参数为归约的初始值
++ 第二个参数为归约操作进行的字段
++ 第三个参数为归约操作的过程
 
-
-
-
-
-
-
+计算所有人的年龄总和
+```java
+Optional<Integer> sumAge = list.stream()
+      .collect(Collectors.reducing(0,Person::getAge,(i,j)->i+j));
+```
+上面例子中，reducing函数一共接收了三个参数：
++ 第一个参数表示归约的初始值。我们需要累加，因此初始值为0
++ 第二个参数表示需要进行归约操作的字段。这里我们对Person对象的age字段进行累加。
++ 第三个参数表示归约的过程。这个参数接收一个Lambda表达式，而且这个Lambda表达式一定拥有两个参数，分别表示当前相邻的两个元素。由于我们需要累加，因此我们只需将相邻的两个元素加起来即可。
 
 
 

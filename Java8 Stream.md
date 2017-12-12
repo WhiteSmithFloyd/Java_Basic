@@ -187,6 +187,82 @@ OptionalInt maxAge = list.stream()
 此外，mapToInt、mapToDouble、mapToLong进行数值操作后的返回结果分别为：OptionalInt、OptionalDouble、OptionalLong
 
 
+## 收集器简介
+收集器用来将经过筛选、映射的流进行最后的整理，可以使得最后的结果以不同的形式展现。   
+
+**collect方法即为收集器**，它接收**Collector接口的实现**作为具体收集器的收集方法。
+> Collector接口提供了很多默认实现的方法，我们可以直接使用它们格式化流的结果；   
+> 也可以自定义Collector接口的实现，从而定制自己的收集器。
+
+下面介绍Collector常用默认静态方法的使用
+
+
+## 收集器的使用   
+### 归约
+流由一个个元素组成，归约就是将一个个元素“折叠”成一个值，如求和、求最值、求平均值都是归约操作   
+
+#### 计数
+```java
+long count = list.stream()
+      .collect(Collectors.counting());
+```
+也可以不使用收集器的计数函数：
+```java
+long count = list.stream().count();
+```
+
+#### 最值
+找出所有人中年龄最大的人
+```java
+Optional<Person> oldPerson = list.stream()
+      .collect(Collectors.maxBy(Comparator.comparingInt(Person::getAge)));
+```
+计算最值需要使用Collector.maxBy和Collector.minBy，这两个函数需要传入一个比较器**Comparator.comparingInt**，这个比较器又要接收需要比较的字段。
+
+
+#### 求和
+计算所有人的年龄总和
+```java
+int summing = list.stream()
+      .collect(Collectors.summingInt(Person::getAge));
+```
+既然Java8提供了summingInt，那么还提供了summingLong、summingDouble。
+
+
+#### 求平均值
+计算所有人的年龄平均值
+```java
+double avg = list.stream()
+      .collect(Collectors.averagingInt(Person::getAge));
+```
+计算平均值时，不论计算对象是int、long、double，计算结果一定都是double。
+
+
+
+#### 一次性计算所有归约操作
+**Collectors.summarizingInt**函数能一次性将最值、均值、总和、元素个数全部计算出来，并存储在对象IntSummaryStatisics中。    
+可以通过该对象的getXXX()函数获取这些值。
+
+
+#### 连接字符串
+将所有人的名字连接成一个字符串
+```java
+String names = list.stream()
+      .collect(Collectors.joining());
+```
+每个字符串默认分隔符为空格，若需要指定分隔符，则在joining中加入参数即可：
+```java
+String names = list.stream()
+      .collect(Collectors.joining(", "));
+```
+
+
+
+
+
+
+
+
 
 
 

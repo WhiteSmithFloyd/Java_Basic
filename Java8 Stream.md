@@ -1,5 +1,5 @@
 # Java8 Stream
-From http://blog.csdn.net/u010425776/article/details/52344425
+From http://blog.csdn.net/u010425776/article/details/77888625
 [TOC]
 
 ## 什么是流

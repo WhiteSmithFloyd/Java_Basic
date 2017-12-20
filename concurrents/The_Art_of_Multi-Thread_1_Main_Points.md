@@ -32,12 +32,15 @@
 
 
 
+
+
 #### 上下文切换是有开销的
 每次进行上下文切换时都需要保存当前线程的执行状态，并加载新线程先前的状态。    
-
 如果上下文切换频繁，CPU花在上下文切换上的时间占比就会上升，而真正处理任务的时间占比就会下降。 
-
 因此，为了提高并发程序的执行效率，让CPU把时间花在刀刃上，我们需要减少上下文切换的次数。
+
+
+
 
 
 
@@ -52,17 +55,19 @@
 
 因此，**减少同一把锁上的线程数量也能减少上下文切换的次数**。
 
+
+
+
+
 ##### 采用无锁并发编程 
 我们知道，如果减少同一把锁上线程的数量就能减少上下文切换的次数，那么如果不用锁，是否就能避免因竞争锁而产生的上下文切换呢？ 
 
 答案是肯定的！但你需要根据以下两种情况挑选不同的策略：
 
-1. 需要并发执行的任务是**无状态**的：**HASH分段**   [ConcurrentHashMap介绍](http://blog.csdn.net/chuchus/article/details/43671589)   [ConcurrentHashMap剖析](https://www.cnblogs.com/protected/p/6432977.html) 
-
+1. 需要并发执行的任务是**无状态**的：**HASH分段**   [ConcurrentHashMap介绍](http://blog.csdn.net/chuchus/article/details/43671589)   [ConcurrentHashMap剖析](https://www.cnblogs.com/protected/p/6432977.html)       
 所谓无状态是指并发执行的任务没有共享变量，他们都独立执行。对于这种类型的任务可以按照ID进行HASH分段，每段用一条线程去执行。
 
-2. 需要并发执行的任务是**有状态**的：**CAS算法**   [CAS介绍](http://blog.csdn.net/liubenlong007/article/details/53761730) [缺点](https://www.cnblogs.com/zhuawang/p/4196904.html)   
-
+2. 需要并发执行的任务是**有状态**的：**CAS算法**   [CAS介绍](http://blog.csdn.net/liubenlong007/article/details/53761730) [缺点](https://www.cnblogs.com/zhuawang/p/4196904.html)      
 如果任务需要修改共享变量，那么必须要控制线程的执行顺序，否则会出现安全性问题。你可以给任务加锁，保证任务的原子性与可见性，但这会引起阻塞，从而发生上下文切换；为了避免上下文切换，你可以使用CAS算法， 仅在线程内部需要更新共享变量时使用CAS算法来更新，这种方式不会阻塞线程，并保证更新过程的安全性。
 
 

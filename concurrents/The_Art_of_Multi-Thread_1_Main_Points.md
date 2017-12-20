@@ -52,7 +52,7 @@
 我们知道，如果减少同一把锁上线程的数量就能减少上下文切换的次数，那么如果不用锁，是否就能避免因竞争锁而产生的上下文切换呢？ 
 答案是肯定的！但你需要根据以下两种情况挑选不同的策略：
 
-1. 需要并发执行的任务是**无状态**的：**HASH分段**
+1. 需要并发执行的任务是**无状态**的：**HASH分段**   [ConcurrentHashMap介绍](http://blog.csdn.net/chuchus/article/details/43671589)   [ConcurrentHashMap剖析](https://www.cnblogs.com/protected/p/6432977.html) 
 所谓无状态是指并发执行的任务没有共享变量，他们都独立执行。对于这种类型的任务可以按照ID进行HASH分段，每段用一条线程去执行。
 
 2. 需要并发执行的任务是**有状态**的：**CAS算法**   [CAS介绍](http://blog.csdn.net/liubenlong007/article/details/53761730) [缺点](https://www.cnblogs.com/zhuawang/p/4196904.html)   

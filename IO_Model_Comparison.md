@@ -11,7 +11,11 @@
 + “系统调用”是指程序请求内核执行某些操作。其实现细节因操作系统而异，但基本概念是相同的。在执行“系统调用”时，将会有一些控制程序的特定指令转移到内核中去。一般来说，系统调用是阻塞的，这意味着程序会一直等待直到内核返回结果。
 + 内核在物理设备（磁盘、网卡等）上执行底层I/O操作并回复系统调用。在现实世界中，内核可能需要做很多事情来满足你的请求，包括等待设备准备就绪、更新其内部状态等等，但作为一名应用程序开发人员，你无需关心这些，这是内核的事情。
 
+
+
 ![image](http://upload-images.jianshu.io/upload_images/2397007-46a7664173ee4ed3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 
 
 ## 阻塞调用与非阻塞调用
@@ -51,7 +55,12 @@ PHP使用的模型非常简单。虽然不可能完全相同，但一般的PHP�
 Apache调用PHP并告诉它运行磁盘上的某个.php文件。
 
 PHP代码开始执行，并阻塞I/O调用。你在PHP中调用的file_get_contents()，在底层实际上是调用了read()系统调用并等待返回的结果。
+
+
+
 ![image](http://upload-images.jianshu.io/upload_images/2397007-1011a967f9dcbd45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 
 很简单：每个请求一个进程。 I/O调用是阻塞的。那么优点呢？简单而又有效。缺点呢？如果有20000个客户端并发，服务器将会瘫痪。这种方法扩展起来比较难，因为内核提供的用于处理大量I/O（epoll等）的工具并没有充分利用起来。更糟糕的是，为每个请求运行一个单独的进程往往会占用大量的系统资源，尤其是内存，这通常是第一个耗尽的。
 
@@ -84,7 +93,10 @@ publicvoiddoGet(HttpServletRequest request,
 
 值得注意的是，1.4版本的Java（1.7版本中又重新做了升级）增加了非阻塞I/O调用的能力。虽然大多数的应用程序都没有使用这个特性，但它至少是可用的。一些Java Web服务器正在尝试使用这个特性，但绝大部分已经部署的Java应用程序仍然按照上面所述的原理进行工作。
 
+
+
 ![image](http://upload-images.jianshu.io/upload_images/2397007-dcfbe39a74d6eeb2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 
 ## 把非阻塞I/O作为头等大事：Node
@@ -104,7 +116,11 @@ http.createServer(function(request, response) {
 
 这样，Node就能更有效地处理这些回调函数的I/O。有一个更能说明问题的例子：在Node中调用数据库操作。首先，你的程序开始调用数据库操作，并给Node一个回调函数，Node会使用非阻塞调用来单独执行I/O操作，然后在请求的数据可用时调用你的回调函数。这种对I/O调用进行排队并让Node处理I/O调用然后得到一个回调的机制称为“事件循环”。这个机制非常不错。
 
+
+
 ![image](http://upload-images.jianshu.io/upload_images/2397007-5faccbd22eb7a650.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 
 然而，这个模型有一个问题。在底层，这个问题出现的原因跟V8 JavaScript引擎（Node使用的是Chrome的JS引擎）的实现有关，即：你写的JS代码都运行在一个线程中。请思考一下。这意味着，尽管使用高效的非阻塞技术来执行I/O，但是JS代码在单个线程操作中运行基于CPU的操作，每个代码块都会阻塞下一个代码块的运行。有一个常见的例子：在数据库记录上循环，以某种方式处理记录，然后将它们输出到客户端。下面这段代码展示了这个例子的原理：
 ```javascript
@@ -132,7 +148,12 @@ var handler = function(request, response) {
 让我们看看它是如何处理I/O的吧。 Go语言的一个关键特性是它包含了自己的调度器。它并不会为每个执行线程对应一个操作系统线程，而是使用了“goroutines”这个概念。Go运行时会为一个goroutine分配一个操作系统线程，并控制它执行或暂停。Go HTTP服务器的每个请求都在一个单独的Goroutine中进行处理。
 
 调度程序的工作原理如下所示：
+
+
+
 ![image](http://upload-images.jianshu.io/upload_images/2397007-6ea17da32bd114f7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 
 实际上，除了回调机制被内置到I/O调用的实现中并自动与调度器交互之外，Go运行时正在做的事情与Node不同。它也不会受到必须让所有的处理代码在同一个线程中运行的限制，Go会根据其调度程序中的逻辑自动将你的Goroutine映射到它认为合适的操作系统线程中。因此，它的代码是这样的：
 ```java

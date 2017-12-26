@@ -103,9 +103,6 @@ for ( int i=0; i<10; i++ ) {
      * 当然你可以调用poll，不会被阻塞，若没有结果会返回null，poll和take返回正确的结果后会将该结果从队列中删除）
      */
     Future<String> future = completionService.take();
-    /**
-     * asfd
-     */
     // 从future中取出执行结果，这里存储的future已经拥有执行结果，get不会被阻塞
     String result = future.get();
     System.out.println(result);

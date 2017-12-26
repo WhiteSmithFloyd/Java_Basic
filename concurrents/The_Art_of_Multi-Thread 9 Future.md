@@ -82,13 +82,13 @@ ExecutorService exec = Executors.newFixedThreadPool(10);
 
 final BlockingQueue<Future<Integer>> queue = new LinkedBlockingDeque<Future<Integer>>(  
                 10);  
-        //实例化CompletionService  
-        final CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(  
+//实例化CompletionService  
+final CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(  
                 exec, queue); 
 
 // 提交10个任务
 for ( int i=0; i<10; i++ ) {
-    executorService.submit( new Callable<String>(){
+    completionService.submit( new Callable<String>(){
         public String call(){
             int sleepTime = new Random().nextInt(1000);
             Thread.sleep(sleepTime);

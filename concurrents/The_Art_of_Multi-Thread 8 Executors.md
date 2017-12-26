@@ -19,8 +19,14 @@ ExecutorService的生命周期包括三种状态：**运行**、**关闭**、**�
 如果不调用shutdown()方法，ExecutorService会一直处在运行状态，不断接收新的任务，执行新的任务，服务器端一般不需要关闭它，保持一直运行即可。
 
 
+
 ## Executors类
 Executors提供了一系列工厂方法用于创先线程池，返回的线程池都实现了ExecutorService接口。
+
+
+
+
+
 
 ### public static ExecutorService newFixedThreadPool(int nThreads)
 + 创建固定数目线程的线程池。
@@ -33,6 +39,10 @@ cache池线程数支持0-Integer.MAX_VALUE(显然完全没考虑主机的资源�
 
 
 
+
+
+
+***
 ### public static ExecutorService newCachedThreadPool()
 + 创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有60秒钟未被使用的线程。
 + 缓存型池子通常用于执行一些生存期很短的异步型任务；
@@ -41,22 +51,22 @@ cache池线程数支持0-Integer.MAX_VALUE(显然完全没考虑主机的资源�
 
 
 
-
+***
 ### public static ExecutorService newSingleThreadExecutor()
 + 创建一个单线程化的Executor。
 + 用的是和cache池和fixed池相同的底层池，但线程数目是1-1,0秒IDLE（无IDLE）
 
 
 
-
+***
 ### public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) 
 创建一个支持定时及周期性的任务执行的线程池，多数情况下可用来替代Timer类.
 
 
-#### Timer类存在以下缺陷：
-+ Timer类不管启动多少定时器，但它只会启动一条线程，当有多个定时任务时，就会产生延迟。如：我们要求一个任务每隔3S执行，且执行大约需要10S，第二个任务每隔5S执行，两个任务同时启动。若使用Timer我们会发现，第而个任务是在第一个任务执行结束后的5S才开始执行。这就是多任务的延时问题。
-+ 若多个定时任务中有一个任务抛异常，那所有任务都无法执行。
-+ Timer执行周期任务时依赖系统时间。若系统时间发生变化，那Timer执行结果可能也会发生变化。而ScheduledExecutorService基于时间的延迟，并非时间，因此不会由于系统时间的改变发生执行变化。 
+> #### Timer类存在以下缺陷：
+> + Timer类不管启动多少定时器，但它只会启动一条线程，当有多个定时任务时，就会产生延迟。如：我们要求一个任务每隔3S执行，且执行大约需要10S，第二个任务每隔5S执行，两个任务同时启动。若使用Timer我们会发现，第而个任务是在第一个任务执行结束后的5S才开始执行。这就是多任务的延时问题。
+> + 若多个定时任务中有一个任务抛异常，那所有任务都无法执行。
+> + Timer执行周期任务时依赖系统时间。若系统时间发生变化，那Timer执行结果可能也会发生变化。而ScheduledExecutorService基于时间的延迟，并非时间，因此不会由于系统时间的改变发生执行变化。 
 综上所述，定时任务要使用ScheduledExecutorService取代Timer。
 
 
@@ -74,14 +84,66 @@ cache池线程数支持0-Integer.MAX_VALUE(显然完全没考虑主机的资源�
 
 
 
+### Executor执行Runnable任务
+通过Executors的以上四个静态工厂方法获得 ExecutorService实例，而后调用该实例的execute（Runnable command）方法即可。一旦Runnable任务传递到execute（）方法，该方法便会自动在一个线程上执行。
+```java
+// 获取ExecutorService实例
+ExecutorService executorService = Executors.newCachedThreadPool();
+
+// 提交任务
+executorService.execute( new Runnable(){
+    public void run(){
+        //……
+    }
+} );
+```
+
+### Executor执行Callable任务
+```java
+// 创建线程池
+ExecutorService executorService = Executors.newCachedThreadPool();
+
+// 提交任务
+Future<String> future = executorService.submit( new Callable<String>{
+    public String call(){
+        // ……
+    }
+} );
+
+// 获取执行结果
+if ( future.isDone ) {
+    String result = future.get();
+}
+
+// 关闭线程池
+executorService.shutdown();
+```
++ Callable<String>表示call函数返回值为String类型；
++ 如果Future的返回尚未完成，则 **get()方法会阻塞等待** ，直到Future完成返回，可以通过调用isDone()方法判断Future是否完成了返回。
 
 
 
+******
+
+## ThreadPoolExecutor类
+该类用于构造自定义的线程池。构造方法如下：
+```java
+public ThreadPoolExecutor (int corePoolSize, int maximumPoolSize, long keepAliveTime,
+  TimeUnit unit,BlockingQueue<Runnable> workQueue)
+```
++ corePoolSize：线程池中所保存的核心线程数，包括空闲线程。线程池认为这是一个最合理的值，它会尽量使得线程数量维持在这个值上下。
++ maximumPoolSize：池中允许的最大线程数。
++ keepAliveTime：线程池中的空闲线程所能持续的最长时间。
++ unit：持续时间的单位。
++ workQueue：任务执行前保存任务的队列，仅保存由execute方法提交的Runnable任务。
 
 
-
-
-
+当试图通过excute方法讲一个Runnable任务添加到线程池中时，按照如下顺序来处理：
+1. 如果线程池中的线程数量少于corePoolSize，即使线程池中有空闲线程，也会创建一个新的线程来执行新添加的任务；
+2. 如果线程池中的线程数量大于等于corePoolSize，但缓冲队列workQueue未满，则不再创建新的线程，并将新任务放到workQueue中，按照FIFO的原则依次等待执行（线程池中有线程空闲出来后依次将缓冲队列中的任务交付给空闲的线程执行）；
+3. 如果线程池中的线程数量大于等于corePoolSize，且缓冲队列workQueue已满，但线程池中的线程数量小于maximumPoolSize，则会创建新的线程来处理被添加的任务；
+4. 如果线程池中的线程数量等于了maximumPoolSize，有4种才处理方式（该构造方法调用了含有5个参数的构造方法，并将最后一个构造方法为RejectedExecutionHandler类型，它在处理线程溢出时有4种方式，这里不再细说，要了解的，自己可以阅读下源码）。
+5. 另外，当线程池中的线程数量大于corePoolSize时，如果里面有线程的空闲时间超过了keepAliveTime，就将其移除线程池，这样，可以动态地调整线程池中线程的数量。
 
 
 

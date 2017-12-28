@@ -38,9 +38,9 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 
 + maximumPoolSize：最大线程数量      
 这是线程数量的上界。 
-如果实际线程数量达到这个值：
-++ 阻塞队列未满：任务存入阻塞队列等待执行
-++ 阻塞队列已满：调用饱和策略
+> 如果实际线程数量达到这个值：
+> 1. 阻塞队列未满：任务存入阻塞队列等待执行
+> 2. 阻塞队列已满：调用饱和策略
 
 + keepAliveTime：空闲线程的存活时间    
 当实际线程数量超过corePoolSize时，若线程空闲的时间超过该值，就会被停止。 
@@ -49,36 +49,37 @@ PS：当任务很多，且任务执行时间很短的情况下，可以将该值
 + timeUnit：keepAliveTime的单位      
 
 + runnableTaskQueue：任务队列    
-这是一个存放任务的阻塞队列，可以有如下几种选择： 
-1. ArrayBlockingQueue    
-它是一个由数组实现的阻塞队列，**FIFO**。
-
-2. LinkedBlockingQueue    
-它是一个由链表实现的阻塞队列，**FIFO**。 
-吞吐量通常要高于ArrayBlockingQueue。 
-fixedThreadPool使用的阻塞队列就是它。 
-它是一个**无界队列**。
-
-3. SynchronousQueue    
-它是一个没有存储空间的阻塞队列，任务提交给它之后必须要交给一条工作线程处理；   
-如果当前没有空闲的工作线程，则立即创建一条新的工作线程。 
-cachedThreadPool用的阻塞队列就是它。 
-它是一个**无界队列**。
-
-4. PriorityBlockingQueue 
-它是一个优先权阻塞队列。
+这是一个存放任务的阻塞队列。   
+> 可以有如下几种选择： 
+> 1. ArrayBlockingQueue    
+> 它是一个由数组实现的阻塞队列，**FIFO**。
+>      
+> 2. LinkedBlockingQueue    
+> 它是一个由链表实现的阻塞队列，**FIFO**。 
+> 吞吐量通常要高于ArrayBlockingQueue。 
+> fixedThreadPool使用的阻塞队列就是它。 
+> 它是一个**无界队列**。
+>      
+> 3. SynchronousQueue    
+> 它是一个没有存储空间的阻塞队列，任务提交给它之后必须要交给一条工作线程处理；   
+> 如果当前没有空闲的工作线程，则立即创建一条新的工作线程。 
+> cachedThreadPool用的阻塞队列就是它。 
+> 它是一个**无界队列**。
+>      
+> 4. PriorityBlockingQueue 
+> 它是一个优先权阻塞队列。
 
 + handler：饱和策略   
 当实际线程数达到maximumPoolSize，并且阻塞队列已满时，就会调用饱和策略。 
-JDK1.5由四种饱和策略： 
-1. AbortPolicy     
-     默认。直接抛异常。
-2. CallerRunsPolicy     
-     只用调用者所在的线程执行任务。
-3. DiscardOldestPolicy    
-     丢弃任务队列中最久的任务。
-4. DiscardPolicy     
-     丢弃当前任务
+> **JDK1.5由四种饱和策略**： 
+> 1. AbortPolicy     
+>      默认。直接抛异常。
+> 2. CallerRunsPolicy     
+>      只用调用者所在的线程执行任务。
+> 3. DiscardOldestPolicy    
+>      丢弃任务队列中最久的任务。
+> 4. DiscardPolicy     
+>      丢弃当前任务
       
       
       

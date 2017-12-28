@@ -39,8 +39,8 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 + maximumPoolSize：最大线程数量      
 这是线程数量的上界。 
 如果实际线程数量达到这个值：
-1. 阻塞队列未满：任务存入阻塞队列等待执行
-2. 阻塞队列已满：调用饱和策略
+++ 阻塞队列未满：任务存入阻塞队列等待执行
+++ 阻塞队列已满：调用饱和策略
 
 + keepAliveTime：空闲线程的存活时间    
 当实际线程数量超过corePoolSize时，若线程空闲的时间超过该值，就会被停止。 

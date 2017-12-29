@@ -18,11 +18,11 @@
   将调用者线程的中断状态设为true。
 - public boolean isInterrupted() 
   判断调用者线程的中断状态。
-- public static boolean interrupted 
+- public static boolean interrupted() 
   只能通过Thread.interrupted()调用。 
   它会做两步操作：
-  1. 返回**当前线程**的中断状态；
-  2. 将当前线程的中断状态设为**false**；
+  + 返回**当前线程**的中断状态；
+  + 将当前线程的中断状态设为**false**；
 
 
 

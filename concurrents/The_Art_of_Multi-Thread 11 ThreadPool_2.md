@@ -69,7 +69,8 @@ public static ExecutorService newSingleThreadExecutor(){
 
 
 ###  4. ScheduledThreadPool
-它用来处理延时任务或定时任务。
+它用来处理延时任务或定时任务。   
+
 ![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_6.jpg)
 
 

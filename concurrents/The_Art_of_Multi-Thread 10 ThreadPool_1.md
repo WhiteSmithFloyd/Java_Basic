@@ -39,8 +39,8 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 + maximumPoolSize：最大线程数量      
 这是线程数量的上界。 
 > 如果实际线程数量达到这个值：
-> 1. 阻塞队列未满：任务存入阻塞队列等待执行
-> 2. 阻塞队列已满：调用饱和策略
+> - 阻塞队列未满：任务存入阻塞队列等待执行
+> - 阻塞队列已满：调用饱和策略
 
 + keepAliveTime：空闲线程的存活时间    
 当实际线程数量超过corePoolSize时，若线程空闲的时间超过该值，就会被停止。 
@@ -57,13 +57,13 @@ PS：当任务很多，且任务执行时间很短的情况下，可以将该值
 > 2. LinkedBlockingQueue    
 > 它是一个由链表实现的阻塞队列，**FIFO**。 
 > 吞吐量通常要高于ArrayBlockingQueue。 
-> fixedThreadPool使用的阻塞队列就是它。 
+> **fixedThreadPool使用的阻塞队列就是它**。 
 > 它是一个**无界队列**。
 >      
 > 3. SynchronousQueue    
-> 它是一个没有存储空间的阻塞队列，任务提交给它之后必须要交给一条工作线程处理；   
+> 它是一个**没有存储空间的阻塞队列**，任务提交给它之后必须要交给一条工作线程处理；   
 > 如果当前没有空闲的工作线程，则立即创建一条新的工作线程。 
-> cachedThreadPool用的阻塞队列就是它。 
+> **cachedThreadPool用的阻塞队列就是它**。 
 > 它是一个**无界队列**。
 >      
 > 4. PriorityBlockingQueue 

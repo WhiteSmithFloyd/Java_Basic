@@ -75,21 +75,21 @@ public static ExecutorService newSingleThreadExecutor(){
 
 
 + 它接收SchduledFutureTask类型的任务，有两种提交任务的方式：
-  1. scheduledAtFixedRate
-  2. scheduledWithFixedDelay
+  - scheduledAtFixedRate
+  - scheduledWithFixedDelay
   
 + SchduledFutureTask接收的参数：
-  1. time：任务开始的时间
-  2. sequenceNumber：任务的序号
-  3. period：任务执行的时间间隔
+  - time：任务开始的时间
+  - sequenceNumber：任务的序号
+  - period：任务执行的时间间隔
   
 + 它采用DelayQueue存储等待的任务
-  > + DelayQueue内部封装了一个PriorityQueue，它会根据time的先后时间排序，若time相同则根据sequenceNumber排序；
-  > + DelayQueue也是一个无界队列；
+  - DelayQueue内部封装了一个PriorityQueue，它会根据time的先后时间排序，若time相同则根据sequenceNumber排序；
+  - DelayQueue也是一个无界队列；
 
 + 工作线程的执行过程：
-  1. 工作线程会从DelayQueue取已经到期的任务去执行；
-  2. 执行结束后重新设置任务的到期时间，再次放回DelayQueue
+  - 工作线程会从DelayQueue取已经到期的任务去执行；
+  - 执行结束后重新设置任务的到期时间，再次放回DelayQueue
 
 
 

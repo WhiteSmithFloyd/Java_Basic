@@ -1,7 +1,7 @@
 # The Art of Multi-Thread 11 线程池二
 
 ## Executor两级调度模型
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_1.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_1.jpg)     
 在HotSpot虚拟机中，Java中的线程将会被一一映射为操作系统的线程。 
 在Java虚拟机层面，用户将多个任务提交给Executor框架，Executor负责分配线程执行它们； 
 在操作系统层面，操作系统再将这些线程分配给处理器执行。
@@ -34,7 +34,7 @@ public static ExecutorService newFixedThreadPool(int nThreads){
     return new ThreadPoolExecutor(nThreads,nThreads,0L,TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>());
 }
 ```
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_3.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_3.jpg)     
 + 它是一种固定大小的线程池；
 + corePoolSize和maximunPoolSize都为用户设定的线程数量nThreads；
 + keepAliveTime为0，意味着一旦有多余的空闲线程，就会被立即停止掉；但这里keepAliveTime无效；
@@ -49,7 +49,7 @@ public static ExecutorService newCachedThreadPool(){
     return new ThreadPoolExecutor(0,Integer.MAX_VALUE,60L,TimeUnit.MILLISECONDS,new SynchronousQueue<Runnable>());
 }
 ```
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_4.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_4.jpg)      
 + 它是一个可以无限扩大的线程池；
 + 它比较适合处理执行时间比较小的任务；
 + corePoolSize为0，maximumPoolSize为无限大，意味着线程数量可以无限大；
@@ -63,7 +63,7 @@ public static ExecutorService newSingleThreadExecutor(){
     return new ThreadPoolExecutor(1,1,0L,TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>());
 }
 ```
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_5.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_5.jpg)       
 + 它只会创建一条工作线程处理任务；
 + 采用的阻塞队列为LinkedBlockingQueue；
 
@@ -71,7 +71,7 @@ public static ExecutorService newSingleThreadExecutor(){
 ###  4. ScheduledThreadPool
 它用来处理延时任务或定时任务。   
 
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_6.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/imgs/art_thread/art_thread_11_6.jpg) 
 
 
 + 它接收SchduledFutureTask类型的任务，有两种提交任务的方式：

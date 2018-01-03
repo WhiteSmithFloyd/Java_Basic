@@ -91,7 +91,7 @@ suspend方法会暂停线程，但它不会释放资源，若resume需要请求�
 
 同步指的是同一时刻，只有一条线程操作『共享变量』。
 
-实现同步的方式有很多：**互斥访问**、**[CAS操作(乐观锁_非阻塞式)](https://github.com/WhiteSmithFloyd/Java_Basic/blob/master/concurrents/ABA%20Issue.md)**。     
+实现同步的方式有很多：**互斥访问**、**[CAS操作(乐观锁_非阻塞式)](https://github.com/WhiteSmithFloyd/Java_Basic/blob/master/concurrents/ABA%20Issue.md)**          
 互斥会引起阻塞，当一条线程请求一个已经被另一线程使用的锁时，就会进入阻塞态；而进入阻塞态会涉及上下文切换。因此，使用互斥来实现同步的开销是很大的。
 
 互斥同步(阻塞式同步)是一种『**悲观锁**』，即它认为总是存在多条线程竞争资源的情况，因此它不管当前是不是真的有多条线程在竞争共享资源，它总是先上锁，然后再处理。

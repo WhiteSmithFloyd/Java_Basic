@@ -50,8 +50,8 @@ public final int get() {
  
  
  ## ABA问题
- CAS看起来很爽，但是会导致“**ABA问题**”。    
- CAS算法实现一个重要前提需要取出内存中某时刻的数据，而在下时刻比较并替换，那么在这个时间差类会导致数据的变化。    
+ CAS看起来很爽，但是会导致“**ABA问题**”。              
+ CAS算法实现一个重要前提需要取出内存中某时刻的数据，而在下时刻比较并替换，那么在这个时间差类会导致数据的变化。      
  > 比如说一个线程one从内存位置V中取出A，这时候另一个线程two也从内存中取出A，并且two进行了一些操作变成了B，然后two又将V位置的数据变成A，这时候线程one进行CAS操作发现内存中仍然是A，然后one操作成功。尽管线程one的CAS操作成功，但是不代表这个过程就是没有问题的。如果链表的头在变化了两次后恢复了原值，但是不代表链表就没有变化。
  
  ### 例子
@@ -72,8 +72,8 @@ head.compareAndSet(A,B);
 其中堆栈中只有B一个元素，C和D组成的链表不再存在于堆栈中，平白无故就把C、D丢掉了。
 
 
-以上就是由于ABA问题带来的隐患，各种乐观锁的实现中通常都会用版本戳version来对记录或对象标记，避免并发操作带来的问题。    
-在Java中，**AtomicStampedReference&lt;E&gt;** 也实现了这个作用，它通过包装[E,Integer]的元组来对对象标记版本戳stamp，从而避免ABA问题。    
+以上就是由于ABA问题带来的隐患，各种乐观锁的实现中通常都会用版本戳version来对记录或对象标记，避免并发操作带来的问题。         
+在Java中，**AtomicStampedReference&lt;E&gt;** 也实现了这个作用，它通过包装[E,Integer]的元组来对对象标记版本戳stamp，从而避免ABA问题。       
 例如下面的代码分别用**AtomicInteger**和**AtomicStampedReference**来对初始值为100的原子整型变量进行更新，
  - AtomicInteger会成功执行CAS操作
  - 而加上版本戳的AtomicStampedReference对于ABA问题会执行CAS失败：

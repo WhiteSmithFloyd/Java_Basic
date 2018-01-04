@@ -83,7 +83,7 @@ public static ExecutorService newSingleThreadExecutor(){
   - sequenceNumber：任务的序号
   - period：任务执行的时间间隔
   
-+ 它采用[DelayQueue](https://www.cnblogs.com/wxgblogs/p/5464867.html)存储等待的任务
++ 它采用[DelayQueue](https://github.com/WhiteSmithFloyd/Java_Basic/blob/master/concurrents/DelayQueue.md)存储等待的任务
   - DelayQueue内部封装了一个PriorityQueue，它会根据time的先后时间排序，若time相同则根据sequenceNumber排序；
   - DelayQueue也是一个无界队列；
 

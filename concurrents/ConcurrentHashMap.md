@@ -1,4 +1,4 @@
 # ConcurrentHashMap
 
-From [ConcurrentHashMap总结](http://www.importnew.com/22007.html)
+From [ConcurrentHashMap总结](https://my.oschina.net/hosee/blog/675884)
 

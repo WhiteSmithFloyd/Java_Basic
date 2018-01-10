@@ -206,15 +206,16 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 treeifyBin()就是将链表转换成红黑树。
 
-之前的indefFor()方法消失 了，直接用(tab.length-1)&hash，所以看到这个，代表的就是数组的下角标。
 
+可以看到。put方法与jdk6相比，多出了有关treeNode的处理，同时也少了key为null的判断，记得1.6中的key==null是首先判断并且给他找位置的。
+这个多亏了hash方法，他的传入参数从原先的int值的hashCode变成了对象，支持null的传入，所以null传进去得到0的hashCode也能当做普通值一般化处理了
 ```java
 static final int hash(Object key) {
         int h;
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
 }
 ```
-
+还有之前的indefFor()方法消失 了，直接用(tab.length-1)&hash，所以看到这个，代表的就是数组的下角标.
 
 
 

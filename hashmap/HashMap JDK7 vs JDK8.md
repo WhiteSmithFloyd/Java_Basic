@@ -56,7 +56,7 @@ static int indexFor(int h, int length) {
 
 当发生hash冲突时，则将存放在数组中的Entry设置为新值的next（这里要注意的是，比如A和B都hash后都映射到下标i中，之前已经有A了，当map.put(B)时，将B放到下标i中，A则为B的next，所以新值存放在数组中，旧值在新值的链表上）
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/hashmap/hashmap_jdk7_8_1.jpg)
 
 所以**当hash冲突很多时，HashMap退化成链表**。
 
@@ -120,7 +120,7 @@ jdk7中resize，只有当 size>=threshold并且 table中的那个槽中已经有
 
 JDK7中HashMap采用的是位桶+链表的方式，即我们常说的散列链表的方式，而JDK8中采用的是位桶+链表/红黑树（有关红黑树请查看[红黑树](http://my.oschina.net/hosee/blog/618828)）的方式，也是非线程安全的。当某个位桶的链表的长度达到某个阀值的时候，这个链表就将转换成红黑树。
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/hashmap/hashmap_jdk7_8_2.jpg)
 
 JDK8中，当同一个hash值的节点数不小于8时，将不再以单链表的形式存储了，会被调整成一颗红黑树（上图中null节点没画）。这就是JDK7与JDK8中HashMap实现的最大区别。
 

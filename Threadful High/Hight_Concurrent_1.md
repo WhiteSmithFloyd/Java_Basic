@@ -4,7 +4,8 @@
 
 ### 1.1 同步和异步
 
-首先这里说的同步和异步是指函数/方法调用方面。
+首先这里说的同步和异步是指函数/方法调用方面。     
+
 ![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_1.jpg)
 
 很明显，同步调用会等待方法的返回，异步调用会瞬间返回，但是异步调用瞬间返回并不代表你的任务就完成了，他会在后台起个线程继续进行任务。 
@@ -16,7 +17,8 @@
 
 
 ### 1.3 临界区
-临界区用来表示一种公共资源或者说是共享数据，可以被多个线程使用，但是每一次，只能有一个线程使用它，一旦临界区资源被占用，其他线程要想使用这个资源，就必须等待。 
+临界区用来表示一种公共资源或者说是共享数据，可以被多个线程使用，但是每一次，只能有一个线程使用它，一旦临界区资源被占用，其他线程要想使用这个资源，就必须等待。     
+
 ![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_3.jpg)
 
 
@@ -117,17 +119,20 @@ while (!atomicVar.compareAndSet(localVar, localVar+1))
 **加速比**定义：加速比=优化前系统耗时/优化后系统耗时 
 举个例子： 
 
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_5.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_5.jpg)    
+
 加速比=优化前系统耗时/优化后系统耗时=500/400=1.25 
 
 
-![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_6.jpg)
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_6.jpg)     
+
 这个定理表明：增加CPU处理器的数量并不一定能起到有效的作用 提高系统内可并行化的模块比重，合理增加并行处理器数量，才能以最小的投入，得到最大的加速比。 
 
 
 ### 2.2 Gustafson定律
 
-说明处理器个数，串行比例和加速比之间的关系 
+说明处理器个数，串行比例和加速比之间的关系      
+
 ![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_1_7.jpg)
 
  则加速比=n-F(n-1) //推导过程略

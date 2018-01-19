@@ -4,7 +4,7 @@
 
 下图来源于
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_1.jpg)
 
 但是由于Java版本的不断演变，内存模型也进行了改变。本文只讲述Java内存模型的一些特性，无论是新的内存模型还是旧的内存模型，在明白了这些特性以后，看起来也会更加清晰。
 
@@ -67,13 +67,13 @@ class OrderExample {
 
 假设这里有两条指令
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_2.jpg)
 
 一般来说我们会认为指令是串行执行的，先执行指令1，然后再执行指令2。假设每个步骤需要消耗1个cpu时间周期，那么执行这两个指令需要消耗10个cpu时间周期，这样做效率太低。事实上指令都是并行执行的，当然在第一条指令在执行IF的时候，第二条指令是不能进行IF的，因为指令寄存器等不能被同时占用。所以就如上图所示，两条指令是一种相对错开的方式并行执行。当指令1执行ID的时候，指令2执行IF。这样只用6个cpu时间周期就执行了两个指令，效率比较高。
 
 按照这个思路我们来看下A=B+C的指令是如何执行的。
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_3.jpg)
 
 如图所示，ADD操作时有一个空闲（X）操作，因为当想让B和C相加的时候，在图中ADD的X操作时，C还没从内存中读取（当MEM操作完成时，C才从内存中读取。这里会有一个疑问，此时还没有回写（WB）到R2中，怎么会将R1与R1相加。那是因为在硬件电路当中，会使用一种叫“旁路”的技术直接把数据从硬件当中读取出来，所以不需要等待WB执行完才进行ADD）。所以ADD操作中会有一个空闲（X）时间。在SW操作中，因为EX指令不能和ADD的EX指令同时进行，所以也会有一个空闲（X）时间。
 
@@ -86,17 +86,17 @@ d = e - f
 
 对应的指令如下图
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_4.jpg)
 
 原因和上面的类似，这里就不分析了。我们发现，这里的X很多，浪费的时间周期很多，性能也被影响。有没有办法使X的数量减少呢？
 
 我们希望用一些操作把X的空闲时间填充掉，因为ADD与上面的指令有数据依赖，我们希望用一些没有数据依赖的指令去填充掉这些因为数据依赖而产生的空闲时间。
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_5.jpg)
 
 我们将指令的顺序进行了改变
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_6.jpg)
 
 改变了指令顺序以后，X被消除了。总体的运行时间周期也减少了。
 
@@ -180,7 +180,7 @@ true
 
 该Blog作者用工具将程序还原为汇编代码
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_7.jpg)
 
 这里只截取了一部分汇编代码，红色部分为循环部分，可以清楚得看到只有在0x0193bf9d才进行了stop的验证，而红色部分并没有取stop的值，所以才进行了无限循环。
 
@@ -190,11 +190,11 @@ true
 
 接下来看一些在“Java语言规范”中的示例
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_8.jpg)
 
 上图说明了指令重排将会导致结果不同。
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_9.jpg)
 
 上图使r5=r2的原因是，r2=r1.x，r5=r1.x，在编译时直接将其优化成r5=r2。最后导致结果不同。
 
@@ -221,7 +221,7 @@ true
 
 比如最开始所说的i++的例子
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_3_10.jpg)
 
 就会导致线程不安全。
 

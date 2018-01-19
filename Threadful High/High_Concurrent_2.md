@@ -18,7 +18,7 @@
 
 ### 2.1 线程状态图
 
-
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_2_1.jpg)
 
 上图是Java中线程的基本操作。
 
@@ -68,7 +68,7 @@ CreateThread3()实现了Runnable接口。
 在源码中已经明确说明stop方法被Deprecated，在Javadoc中也说明了原因。
 原因在于stop方法太过"暴力"了，无论线程执行到哪里，它将会立即停止掉线程。
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_2_2.jpg)
 
 
 

@@ -20,10 +20,10 @@ CAS的CPU指令是cmpxchg
 
 指令代码如下：
 ```c
- /*
-	accumulator = AL, AX, or EAX, depending on whether
-	a byte, word, or doubleword comparison is being performed
-	*/
+/*
+accumulator = AL, AX, or EAX, depending on whether
+a byte, word, or doubleword comparison is being performed
+*/
 	if(accumulator == Destination) {
 	ZF = 1;
 	Destination = Source;
@@ -104,29 +104,26 @@ package test;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class Test
-{ 
-	public final static AtomicReference<String> atomicString = new AtomicReference<String>("hosee");
-	public static void main(String[] args)
-	{
-		for (int i = 0; i < 10; i++)
-		{
+public class Test {
+	public final static AtomicReference<String> atomicString = 
+			new AtomicReference<String>("hosee");
+
+	public static void main(String[] args) {
+		for (int i = 0; i < 10; i++) {
 			final int num = i;
 			new Thread() {
 				public void run() {
-					try
-					{
-						Thread.sleep(Math.abs((int)Math.random()*100));
-					}
-					catch (Exception e)
-					{
+					try {
+						Thread.sleep(Math.abs((int) Math.random() * 100));
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					if (atomicString.compareAndSet("hosee", "ztk"))
-					{
-						System.out.println(Thread.currentThread().getId() + "Change value");
-					}else {
-						System.out.println(Thread.currentThread().getId() + "Failed");
+					if (atomicString.compareAndSet("hosee", "ztk")) {
+						System.out.println(Thread.currentThread().getId()
+								+ "Change value");
+					} else {
+						System.out.println(Thread.currentThread().getId()
+								+ "Failed");
 					}
 				};
 			}.start();
@@ -206,74 +203,52 @@ package test;
 
 import java.util.concurrent.atomic.AtomicStampedReference;
 
-public class Test
-{
+public class Test {
 	static AtomicStampedReference<Integer> money = new AtomicStampedReference<Integer>(
 			19, 0);
 
-	public static void main(String[] args)
-	{
-		for (int i = 0; i < 3; i++)
-		{
+	public static void main(String[] args) {
+		for (int i = 0; i < 3; i++) {
 			final int timestamp = money.getStamp();
-			new Thread()
-			{
-				public void run()
-				{
-					while (true)
-					{
-						while (true)
-						{
-							Integer m = money.getReference();
-							if (m < 20)
-							{
-								if (money.compareAndSet(m, m + 20, timestamp,
-										timestamp + 1))
-								{
-									System.out.println("充值成功，余额:"
-											+ money.getReference());
-									break;
-								}
-							}
-							else
-							{
+			new Thread() {
+				public void run() {
+					while (true) {
+						Integer m = money.getReference();
+						if (m < 20) {
+							if (money.compareAndSet(m, m + 20, timestamp,
+									timestamp + 1)) {
+								System.out.println("充值成功，余额:"
+										+ money.getReference());
 								break;
 							}
+						} else {
+							break;
 						}
 					}
 				};
 			}.start();
 		}
 
-		new Thread()
-		{
-			public void run()
-			{
-				for (int i = 0; i < 100; i++)
-				{
-					while (true)
-					{
+		new Thread() {
+			public void run() {
+				for (int i = 0; i < 100; i++) {
+					while (true) {
 						int timestamp = money.getStamp();
 						Integer m = money.getReference();
-						if (m > 10)
-						{
+						if (m > 10) {
 							if (money.compareAndSet(m, m - 10, timestamp,
-									timestamp + 1))
-							{
+									timestamp + 1)) {
 								System.out.println("消费10元，余额:"
-											+ money.getReference());
+										+ money.getReference());
 								break;
 							}
-						}else {
+						} else {
 							break;
 						}
 					}
-					try
-					{
+					try {
 						Thread.sleep(100);
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						// TODO: handle exception
 					}
 				}
@@ -334,38 +309,34 @@ package test;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
-
-public class Test
-{
-	public static class V{
+public class Test {
+	public static class V {
 		int id;
 		volatile int score;
-		public int getScore()
-		{
+
+		public int getScore() {
 			return score;
 		}
-		public void setScore(int score)
-		{
+
+		public void setScore(int score) {
 			this.score = score;
 		}
-		
+
 	}
-	public final static AtomicIntegerFieldUpdater<V> vv = AtomicIntegerFieldUpdater.newUpdater(V.class, "score");
-	
+
+	public final static AtomicIntegerFieldUpdater<V> vv = AtomicIntegerFieldUpdater
+			.newUpdater(V.class, "score");
+
 	public static AtomicInteger allscore = new AtomicInteger(0);
-	
-	public static void main(String[] args) throws InterruptedException
-	{
+
+	public static void main(String[] args) throws InterruptedException {
 		final V stu = new V();
 		Thread[] t = new Thread[10000];
-		for (int i = 0; i < 10000; i++)
-		{
+		for (int i = 0; i < 10000; i++) {
 			t[i] = new Thread() {
 				@Override
-				public void run()
-				{
-					if(Math.random()>0.4)
-					{
+				public void run() {
+					if (Math.random() > 0.4) {
 						vv.incrementAndGet(stu);
 						allscore.incrementAndGet();
 					}
@@ -373,12 +344,11 @@ public class Test
 			};
 			t[i].start();
 		}
-		for (int i = 0; i < 10000; i++)
-		{
+		for (int i = 0; i < 10000; i++) {
 			t[i].join();
 		}
-		System.out.println("score="+stu.getScore());
-		System.out.println("allscore="+allscore);
+		System.out.println("score=" + stu.getScore());
+		System.out.println("allscore=" + allscore);
 	}
 }
 ```

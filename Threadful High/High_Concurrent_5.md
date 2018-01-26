@@ -282,7 +282,7 @@ public class Test implements Runnable
 
 我们用jstack查看运行上述代码后的情况
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_5_1.jpg)
 
 的确发现了一个死锁。
 DeadlockChecker.check();方法用来检测死锁，然后把死锁的线程中断。中断后，线程正常退出。
@@ -525,7 +525,7 @@ end.await();
 
 示意图：
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_5_2.jpg)
 
 一个简单的例子：
 
@@ -590,7 +590,7 @@ await()
 
 示意图：
 
-![Image]()
+![Image](https://github.com/WhiteSmithFloyd/ress/blob/master/high_concurrent/hc_5_3.jpg)
 
 下面举个例子：
 
